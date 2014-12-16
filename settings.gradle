@@ -1,0 +1,8 @@
+rootProject.name = 'jvm-build'
+
+include 'docs', 'docs:manual', 'docs:guides'
+
+def docs = findProject(':docs')
+docs.buildFileName = 'docs.gradle'
+
+include 'jvm'
