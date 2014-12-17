@@ -1,4 +1,4 @@
-package org.oyach.jvm.core.util;
+package org.oyach.jvm.launcher;
 
 /**
  * description
@@ -6,5 +6,5 @@ package org.oyach.jvm.core.util;
  * @author oyach
  * @since 0.0.1
  */
-public class ByteBuffer {
+public class JavaStacks {
 }

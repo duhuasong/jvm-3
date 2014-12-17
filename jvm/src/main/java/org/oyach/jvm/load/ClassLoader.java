@@ -2,6 +2,10 @@ package org.oyach.jvm.load;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import sun.tools.java.ClassFile;
+
+import java.util.HashMap;
+import java.util.Map;
 
 /**
  * ClassLoader 是双亲委派模式，JVM中默认提供了3个实现
@@ -22,8 +26,12 @@ public abstract class ClassLoader {
      */
     private final ClassLoader parent;
 
+    //记录加载解析的类
+    private final Map<String, ClassFile> classFiles = new HashMap<>();
 
     public ClassLoader(ClassLoader parent) {
         this.parent = parent;
     }
+
+
 }

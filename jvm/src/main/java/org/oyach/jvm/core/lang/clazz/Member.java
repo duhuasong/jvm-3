@@ -1,4 +1,4 @@
-package org.oyach.jvm.core.lang;
+package org.oyach.jvm.core.lang.clazz;
 
 /**
  * description
@@ -6,5 +6,5 @@ package org.oyach.jvm.core.lang;
  * @author oyach
  * @since 0.0.1
  */
-public final class Class {
+public class Member {
 }

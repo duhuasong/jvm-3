@@ -6,9 +6,10 @@ package org.oyach.jvm.demo;
  * @author oyach
  * @since 0.0.1
  */
-public class Main {
+public class HelloWorld {
+
 
     public static void main(String[] args) {
-        System.out.println("-----");
+        System.out.println("Hello World");
     }
 }

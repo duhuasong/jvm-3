@@ -5,7 +5,9 @@ dependencies {
     compile "org.slf4j:slf4j-api:$slf4jVersion",
         "org.slf4j:jcl-over-slf4j:$slf4jVersion",
         "org.apache.logging.log4j:log4j-slf4j-impl:$log4jVersion",
-            "org.reflections:reflections:0.9.9"
+            "org.reflections:reflections:0.9.9",
+            'org.ow2.asm:asm:5.0.3',
+            'org.apache.bcel:bcel:5.2'
 
 
     runtime "org.apache.logging.log4j:log4j-core:$log4jVersion"

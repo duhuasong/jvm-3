@@ -1,4 +1,6 @@
-package org.oyach.jvm.core.lang;
+package org.oyach.jvm.parse.attribute;
+
+import org.oyach.jvm.parse.Parser;
 
 /**
  * description
@@ -6,7 +8,9 @@ package org.oyach.jvm.core.lang;
  * @author oyach
  * @since 0.0.1
  */
-public class Exception extends Throwable {
+public class Exception {
+
+    public static final Parser<Exception> PARSER = byteBuffer -> new Exception(byteBuffer.getShort());
 
     private final int exceptionClassIndex;
 

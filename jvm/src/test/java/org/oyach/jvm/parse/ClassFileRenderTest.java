@@ -5,14 +5,15 @@ import org.junit.Test;
 
 import java.io.InputStream;
 
-public class ClassFileParseTest {
+public class ClassFileRenderTest {
 
     @Test
     public void testGetInstance() throws Exception {
-        ClassFileParse parse = ClassFileParse.getInstance();
         InputStream inputStream = ClassLoader.getSystemClassLoader()
-                .getResourceAsStream("org/oyach/jvm/parse/ClassFileParseTest.class");
-        parse.read(ByteStreams.toByteArray(inputStream));
+                .getResourceAsStream("org/oyach/jvm/demo/HelloWorld.class");
+
+        ClassFileReader parse = ClassFileReader.reader(inputStream);
+
     }
 
     @Test

@@ -1,10 +1,18 @@
 package org.oyach.jvm.load;
 
+import com.google.common.io.ByteStreams;
+import com.sun.tools.classfile.Dependencies;
 import org.oyach.jvm.core.lang.type.ClassObject;
-import org.oyach.jvm.parse.ClassFile;
-import org.oyach.jvm.parse.ClassFileParse;
+
+import org.oyach.jvm.launcher.MethodArea;
+import org.oyach.jvm.parse.ClassFileReader;
+import org.oyach.jvm.parse.ClassFileResource;
+import org.oyach.jvm.parse.MemberInfo;
+import org.oyach.jvm.parse.cp.CpClass;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import sun.tools.java.ClassFile;
+import sun.tools.java.ClassPath;
 
 import java.io.IOException;
 import java.util.HashMap;
@@ -25,25 +33,36 @@ public class BootstrapClassLoader {
     // 加载默认JVM类型
     private final static Map<String, ClassObject> classes = new HashMap<>();
 
-    private final Map<String, ClassFile> classFiles = new HashMap<>();
+    //记录加载解析的类
+    private final Map<String, ClassFileReader> classFileReaders = new HashMap<>();
 
     // 单例，只实例化一个启动类加载器
-    private final static BootstrapClassLoader boot;
+//    private final static BootstrapClassLoader boot;
 
-    // 在加载该类时候就进行实例化,因为屏蔽掉了外部实例化调用，所以保证了一次使用
-    static {
-        String libJarPath = System.getProperty("java.lib.jar.path");
-        ClassPath classPath = new ClassPath(libJarPath);
-        boot = new BootstrapClassLoader(classPath);
-    }
+//    // 在加载该类时候就进行实例化,因为屏蔽掉了外部实例化调用，所以保证了一次使用
+//    static {
+//        String libJarPath = System.getProperty("java.lib.jar.path");
+//        ClassPath classPath = new ClassPath(libJarPath);
+//        boot = new BootstrapClassLoader(classPath);
+//    }
+
+
+//    public static BootstrapClassLoader getInstance() {
+//        return boot;
+//    }
+
 
     /**
-     * 禁调默认构造函数
+     * 主要是Main载入
+     *
+     * 这时候JVM并没有开始工作，所以如何解析到main方法呢？
+     *
      * @param classPath 基本类型加载路径
+     * @param mainClassName main方法所在类
      */
-    private BootstrapClassLoader(ClassPath classPath){
+    public BootstrapClassLoader(ClassPath classPath, String mainClassName){
         try {
-            load(classPath);
+            load(classPath, mainClassName);
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -51,15 +70,31 @@ public class BootstrapClassLoader {
 
     /**
      * 加载类
+     *
      * @param classPath 基本类型加载路径
      * @throws IOException
      */
-    private void load(ClassPath classPath) throws IOException {
+    private void load(ClassPath classPath, String mainClassName) throws IOException {
+
+        if (!mainClassName.endsWith(".class")){
+            mainClassName = mainClassName.replace(".", "/");
+            mainClassName += ".class";
+        }
+        ClassFile classFile = classPath.getFile(mainClassName);
+
+        // 方法区放入结构
+        MethodArea.createClassFile(classFile);
+
         // 解析模板
-        ClassFileParse parse = ClassFileParse.getInstance();
+        ClassFileReader reader = ClassFileReader.reader(classFile.getInputStream());
 
 
+        classFileReaders.put(getClassName(reader.getThisClass(), reader.getConstantPool()), reader);
+    }
 
+    private static String getClassName(int index, Object[] constantPool) {
+        CpClass cpClass = (CpClass) constantPool[index];
+        return (String) constantPool[cpClass.getNameIndex()];
     }
 
 }
